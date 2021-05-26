@@ -107,6 +107,7 @@ int main(int argc, char** argv) {
 
 		if (elapsed_seconds.count() > 600 && autoUpdateEnabled) {
 			doUpdate(version, processFileName);
+			start = chrono::system_clock::now();
 		}
 	}
 

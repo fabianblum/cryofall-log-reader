@@ -109,7 +109,7 @@ void postLine(string line, string processFileName) {
 
 void parseAndRequestLine(string line, string processFileName) {
 
-	if (line.find("[IMP] Registering as a private server on the Master Server") != string::npos) {
+	if (line.find("Registering as a public server on the Master Server") != string::npos) {
 
 		regex e("(.*)GUID=(.*)");
 		cmatch cm;
@@ -121,9 +121,12 @@ void parseAndRequestLine(string line, string processFileName) {
 	}
 
 	if (line.find("[SCRIPT] Character killed") != string::npos
-		|| line.find("[SCRIPT] Creating loot") != string::npos
 		|| line.find("[SCRIPT] Character dead") != string::npos
-		|| line.find("[SCRIPT] ChatId") != string::npos) {
+		|| line.find("[SCRIPT] ChatId") != string::npos
+		|| line.find("[CHAT]") != string::npos
+		|| line.find("players_online_count") != string::npos
+		|| line.find("scopes are enabled") != string::npos
+		|| line.find("scopes are disabled") != string::npos) {
 		cout << "\nPOST:" << line << endl;
 		postLine(line, processFileName);
 	}
@@ -142,10 +145,27 @@ void parseFile(string file, int lastPosition, string processFileName) {
 				// Error or premature end of file! Handle appropriately.
 			}
 		}
+		string chatFrom = "";
 
 		while (getline(newfile, tp)) {
 			cout << '\r' << ". Parse line " << lastPosition << "..." << flush;
+
+			if (tp.find("[SCRIPT] ChatId=13") != string::npos) {
+				int from = tp.find("From=\"") + 6;
+				int to = tp.find("\":");
+				chatFrom = tp.substr(from, to - from);
+				lastPosition++;
+				continue;
+			}
+
+			
+			if (chatFrom.length() > 0) {
+				tp = "[CHAT] " + chatFrom + ": " + tp;
+				chatFrom = "";
+			}
+
 			parseAndRequestLine(tp, processFileName);
+			
 			lastPosition++;
 		}
 	}
