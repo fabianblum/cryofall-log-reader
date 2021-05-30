@@ -1,16 +1,39 @@
 ﻿// LogReaderCmake.cpp: Definiert den Einstiegspunkt für die Anwendung.
 //
-#include "LogReaderCmake.h"
 #include <iostream>
 #include <filesystem>
-
-#include "update.h"
 #include "LogFileParser.h"
-#include "server.h"
-#include "file.h"
-#include "common.h"
-#include "lock.h"
 #include <signal.h>
+#include<unistd.h>
+#include<sys/wait.h>
+#include<sys/prctl.h>
+#include<signal.h>
+#include<stdlib.h>
+#include<string.h>
+#include<stdio.h>
+
+#ifndef  COMMON_H  
+#include "common.h"
+#endif
+#ifndef  LOCK_H  
+#include "lock.h"
+#endif
+#ifndef  FILE_H  
+#include "file.h"
+#endif
+#ifndef  SERVER_H  
+#include "server.h"
+#endif
+#ifndef  API_H  
+#include "api.h"
+#endif
+#ifndef  UPDATE_H  
+#include "update.h"
+#endif
+
+
+
+
 
 using namespace std;
 static int version = 2;
@@ -24,6 +47,10 @@ void my_handler(int s) {
 
 
 int main(int argc, char** argv) {
+
+	string token = requestToken("fblum", "test");
+
+	return 0;
 	
 	struct sigaction sigIntHandler;
 	sigIntHandler.sa_handler = my_handler;

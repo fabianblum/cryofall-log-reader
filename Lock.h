@@ -1,3 +1,6 @@
+#ifndef   LOCK_H
+#define   LOCK_H
+
 #pragma once
 #include <algorithm>
 #include <filesystem>
@@ -123,3 +126,5 @@ void cleanLockFile(const char* currentFileName)
     }
     lockFile.close();
 }
+
+#endif
