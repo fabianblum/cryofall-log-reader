@@ -90,7 +90,7 @@ void postLine(string line, string processFileName) {
 	const string json = "{\"GUID\":\"" + serverGuid + "\", \"line\":\"" + escape_json(line) + "\"}";
 
 	string token = requestToken(processFileName);
-	curlPost(apiUrl + "/api.php", json, token);
+	curlPost(apiUrl + "/raw/line", json, token);
 }
 
 
@@ -133,21 +133,26 @@ void parseFile(string file, int lastPosition, string processFileName) {
 			}
 		}
 		string chatFrom = "";
+		string tmpChat = "";
 
 		while (getline(newfile, tp)) {
 			cout << '\r' << ". Parse line " << lastPosition << "..." << flush;
 
-			if (tp.find("[SCRIPT] ChatId=13") != string::npos) {
-				int from = tp.find("From=\"") + 6;
-				int to = tp.find("\":");
-				chatFrom = tp.substr(from, to - from);
+			if (tp.find("[SCRIPT] ChatId") != string::npos) {
+				tmpChat = tp;
 				lastPosition++;
 				continue;
 			}
 
+			if (tmpChat.length() > 0) {
+				chatFrom = tmpChat + " " + tp;
+				tmpChat = "";
+				lastPosition++;
+				continue;
+			}
 
-			if (chatFrom.length() > 0) {
-				tp = "[CHAT] " + chatFrom + ": " + tp;
+			if (tp.find("Character") != string::npos && !chatFrom.empty()) {
+				tp = chatFrom + " " + tp;
 				chatFrom = "";
 			}
 

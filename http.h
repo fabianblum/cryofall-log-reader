@@ -64,6 +64,7 @@ string curlPost(string url, string postData, string token, bool jsonHeader = tru
 	curl_easy_setopt(hnd, CURLOPT_CUSTOMREQUEST, "POST");
 	curl_easy_setopt(hnd, CURLOPT_MAXREDIRS, 50L);
 	curl_easy_setopt(hnd, CURLOPT_TCP_KEEPALIVE, 1L);
+	curl_easy_setopt(hnd, CURLOPT_VERBOSE, 1L);
 
 
 	string response_string;

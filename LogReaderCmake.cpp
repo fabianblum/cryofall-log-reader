@@ -48,10 +48,6 @@ void my_handler(int s) {
 
 int main(int argc, char** argv) {
 
-	string token = requestToken("fblum", "test");
-
-	return 0;
-	
 	struct sigaction sigIntHandler;
 	sigIntHandler.sa_handler = my_handler;
 	sigemptyset(&sigIntHandler.sa_mask);

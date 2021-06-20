@@ -6,7 +6,7 @@
 
 using namespace std;
 
-string apiUrl = "https://localhost:8000";
+string apiUrl = "https://beta.cryofall-api.com";
 
 string getHash(string stringToHash) {
 	size_t h1 = hash<string>{}(stringToHash);
